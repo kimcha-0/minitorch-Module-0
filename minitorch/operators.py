@@ -111,6 +111,35 @@ def relu_back(a: float, b: float) -> float:
 # - zipWith
 # - reduce
 #
+
+def map(
+        arr: Iterable[float], fn: Callable[[float], bool]
+        ) -> Iterable[float]:
+    ret = []
+    for i in range(len(arr)):
+        ret.append(fn(arr[i]))
+    return ret
+
+
+def zipWith(
+        arr1: Iterable[float], arr2: Iterable[float], fn: Callable[[float, float], float]
+        ) -> Iterable[float]:
+    ret = []
+    if len(arr1) != len(arr2):
+        raise ValueError(arr1, arr2)
+    for i in range(len(arr1)):
+        ret.append(fn(arr1[i], arr2[i]))
+    return ret
+
+
+def reduce(
+        arr: Iterable[float], fn: Callable[[float, float], float]
+        ) -> float:
+    result = [i for i in arr]
+    for i in range(len(arr)-1):
+        result[i+1] = fn(result[i], result[i+1])
+    return result[len(arr) - 1] if len(arr) > 0 else 0.0
+
 # Use these to implement
 # - negList : negate a list
 # - addLists : add two lists together
@@ -119,3 +148,17 @@ def relu_back(a: float, b: float) -> float:
 
 
 # TODO: Implement for Task 0.3.
+def negList(arr: Iterable[float]):
+    return map(arr, neg)
+
+
+def addLists(arr1: Iterable[float], arr2: Iterable[float]):
+    return zipWith(arr1, arr2, add)
+
+
+def sum(arr: Iterable[float]):
+    return reduce(arr, add)
+
+
+def prod(arr: Iterable[float]) -> float:
+    return reduce(arr, mul)
